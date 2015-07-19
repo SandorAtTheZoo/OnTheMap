@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74951B5AD8AF0077C33B /* AppDelegate.swift */; };
-		37EA74981B5AD8AF0077C33B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74971B5AD8AF0077C33B /* ViewController.swift */; };
+		37EA74981B5AD8AF0077C33B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74971B5AD8AF0077C33B /* MapViewController.swift */; };
 		37EA749B1B5AD8AF0077C33B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37EA74991B5AD8AF0077C33B /* Main.storyboard */; };
 		37EA749D1B5AD8AF0077C33B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37EA749C1B5AD8AF0077C33B /* Images.xcassets */; };
 		37EA74A01B5AD8AF0077C33B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37EA749E1B5AD8AF0077C33B /* LaunchScreen.xib */; };
@@ -16,6 +16,9 @@
 		37EA74B91B5ADDE50077C33B /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37EA74B61B5ADDE50077C33B /* Roboto-Medium.ttf */; };
 		37EA74BA1B5ADDE50077C33B /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37EA74B71B5ADDE50077C33B /* Roboto-Regular.ttf */; };
 		37EA74BB1B5ADDE50077C33B /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37EA74B81B5ADDE50077C33B /* Roboto-Thin.ttf */; };
+		37EA74BD1B5B2F7E0077C33B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74BC1B5B2F7E0077C33B /* LoginViewController.swift */; };
+		37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74BE1B5B30B70077C33B /* TableViewController.swift */; };
+		37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +35,7 @@
 		37EA74901B5AD8AF0077C33B /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37EA74941B5AD8AF0077C33B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37EA74951B5AD8AF0077C33B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		37EA74971B5AD8AF0077C33B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		37EA74971B5AD8AF0077C33B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		37EA749A1B5AD8AF0077C33B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		37EA749C1B5AD8AF0077C33B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		37EA749F1B5AD8AF0077C33B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -42,6 +45,9 @@
 		37EA74B61B5ADDE50077C33B /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		37EA74B71B5ADDE50077C33B /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		37EA74B81B5ADDE50077C33B /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		37EA74BC1B5B2F7E0077C33B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ../LoginViewController.swift; sourceTree = "<group>"; };
+		37EA74BE1B5B30B70077C33B /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,12 +89,12 @@
 		37EA74921B5AD8AF0077C33B /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
-				37EA74B51B5ADDE50077C33B /* Resources */,
 				37EA74951B5AD8AF0077C33B /* AppDelegate.swift */,
-				37EA74971B5AD8AF0077C33B /* ViewController.swift */,
+				37EA74C01B5B31270077C33B /* ViewControllers */,
 				37EA74991B5AD8AF0077C33B /* Main.storyboard */,
 				37EA749C1B5AD8AF0077C33B /* Images.xcassets */,
 				37EA749E1B5AD8AF0077C33B /* LaunchScreen.xib */,
+				37EA74B51B5ADDE50077C33B /* Resources */,
 				37EA74931B5AD8AF0077C33B /* Supporting Files */,
 			);
 			path = OnTheMap;
@@ -127,6 +133,17 @@
 				37EA74B81B5ADDE50077C33B /* Roboto-Thin.ttf */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		37EA74C01B5B31270077C33B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				37EA74BC1B5B2F7E0077C33B /* LoginViewController.swift */,
+				37EA74971B5AD8AF0077C33B /* MapViewController.swift */,
+				37EA74BE1B5B30B70077C33B /* TableViewController.swift */,
+				37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,8 +249,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37EA74981B5AD8AF0077C33B /* ViewController.swift in Sources */,
+				37EA74BD1B5B2F7E0077C33B /* LoginViewController.swift in Sources */,
+				37EA74981B5AD8AF0077C33B /* MapViewController.swift in Sources */,
 				37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */,
+				37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */,
+				37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
