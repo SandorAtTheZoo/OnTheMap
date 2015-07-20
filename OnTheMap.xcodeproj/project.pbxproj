@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3728A86E1B5C2A8400558C4E /* AuthUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3728A86D1B5C2A8400558C4E /* AuthUserData.swift */; };
-		3728A8701B5C2BBC00558C4E /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */; };
+		3728A8701B5C2BBC00558C4E /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3728A86F1B5C2BBC00558C4E /* MapData.swift */; };
 		3755DC381B5B4876008B3011 /* UserNWClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3755DC371B5B4876008B3011 /* UserNWClient.swift */; };
 		37E56A491B5BFD6200FA38D0 /* InfoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */; };
 		37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74951B5AD8AF0077C33B /* AppDelegate.swift */; };
@@ -38,7 +38,7 @@
 
 /* Begin PBXFileReference section */
 		3728A86D1B5C2A8400558C4E /* AuthUserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthUserData.swift; sourceTree = "<group>"; };
-		3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
+		3728A86F1B5C2BBC00558C4E /* MapData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapData.swift; sourceTree = "<group>"; };
 		3755DC371B5B4876008B3011 /* UserNWClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNWClient.swift; sourceTree = "<group>"; };
 		37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPostViewController.swift; sourceTree = "<group>"; };
 		37EA74901B5AD8AF0077C33B /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,7 +108,7 @@
 				37EA74931B5AD8AF0077C33B /* Supporting Files */,
 				3755DC371B5B4876008B3011 /* UserNWClient.swift */,
 				3728A86D1B5C2A8400558C4E /* AuthUserData.swift */,
-				3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */,
+				3728A86F1B5C2BBC00558C4E /* MapData.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -270,7 +270,7 @@
 				37EA74981B5AD8AF0077C33B /* MapViewController.swift in Sources */,
 				37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */,
 				37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */,
-				3728A8701B5C2BBC00558C4E /* StudentInformation.swift in Sources */,
+				3728A8701B5C2BBC00558C4E /* MapData.swift in Sources */,
 				37E56A491B5BFD6200FA38D0 /* InfoPostViewController.swift in Sources */,
 				37EF5CB81B5D4F49001DDC52 /* MapNavigationController.swift in Sources */,
 				37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */,

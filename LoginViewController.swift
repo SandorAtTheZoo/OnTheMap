@@ -22,6 +22,29 @@ class LoginViewController : UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         /* Get the app delegate */
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        //debug studentInformation
+        let newStu = [
+            "createdAt" : "2015-02-24T22:27:14.456Z",
+            "firstName" : "NoOne",
+            "lastName" : "Johnson",
+            "latitude" : 28.1461248,
+            "longitude" : -82.75676799999999,
+            "mapString" : "Tarpon Springs, FL",
+            "mediaURL" : "www.linkedin.com/in/jessicauelmen/en",
+            "objectId" : "kj18GEaWD8",
+            "uniqueKey" : 872458750,
+            "updatedAt" : "2015-03-09T22:07:09.593Z"
+        ]
+        let aStu = MapData.StudentInformation(dict:newStu)
+        
+        var stu = MapData.allStudentInformation
+        println("stu:\(stu)")
+        stu.append(aStu)
+        for item in stu {
+            var info = item.lastName
+            println("last:\(info)")
+        }
     }
     
     override func didReceiveMemoryWarning() {

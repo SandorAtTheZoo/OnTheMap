@@ -9,13 +9,13 @@
 import UIKit
 
 class MapNavigationController: UINavigationController {
-
-    var au : AuthUserData = AuthUserData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        //logged in, instantiate MapData class
+        var mapData = MapData()
     }
 
     override func didReceiveMemoryWarning() {
