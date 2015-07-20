@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3728A86E1B5C2A8400558C4E /* AuthUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3728A86D1B5C2A8400558C4E /* AuthUserData.swift */; };
+		3728A8701B5C2BBC00558C4E /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */; };
 		3755DC381B5B4876008B3011 /* UserNWClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3755DC371B5B4876008B3011 /* UserNWClient.swift */; };
+		37E56A491B5BFD6200FA38D0 /* InfoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */; };
 		37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74951B5AD8AF0077C33B /* AppDelegate.swift */; };
 		37EA74981B5AD8AF0077C33B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74971B5AD8AF0077C33B /* MapViewController.swift */; };
 		37EA749B1B5AD8AF0077C33B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37EA74991B5AD8AF0077C33B /* Main.storyboard */; };
@@ -33,7 +36,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3728A86D1B5C2A8400558C4E /* AuthUserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthUserData.swift; sourceTree = "<group>"; };
+		3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		3755DC371B5B4876008B3011 /* UserNWClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNWClient.swift; sourceTree = "<group>"; };
+		37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPostViewController.swift; sourceTree = "<group>"; };
 		37EA74901B5AD8AF0077C33B /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37EA74941B5AD8AF0077C33B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37EA74951B5AD8AF0077C33B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +105,8 @@
 				37EA74B51B5ADDE50077C33B /* Resources */,
 				37EA74931B5AD8AF0077C33B /* Supporting Files */,
 				3755DC371B5B4876008B3011 /* UserNWClient.swift */,
+				3728A86D1B5C2A8400558C4E /* AuthUserData.swift */,
+				3728A86F1B5C2BBC00558C4E /* StudentInformation.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -145,6 +153,7 @@
 				37EA74971B5AD8AF0077C33B /* MapViewController.swift */,
 				37EA74BE1B5B30B70077C33B /* TableViewController.swift */,
 				37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */,
+				37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -252,11 +261,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3728A86E1B5C2A8400558C4E /* AuthUserData.swift in Sources */,
 				3755DC381B5B4876008B3011 /* UserNWClient.swift in Sources */,
 				37EA74BD1B5B2F7E0077C33B /* LoginViewController.swift in Sources */,
 				37EA74981B5AD8AF0077C33B /* MapViewController.swift in Sources */,
 				37EA74961B5AD8AF0077C33B /* AppDelegate.swift in Sources */,
 				37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */,
+				3728A8701B5C2BBC00558C4E /* StudentInformation.swift in Sources */,
+				37E56A491B5BFD6200FA38D0 /* InfoPostViewController.swift in Sources */,
 				37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

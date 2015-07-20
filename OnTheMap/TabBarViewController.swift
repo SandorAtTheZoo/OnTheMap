@@ -9,6 +9,7 @@
 import UIKit
 
 class TabBarViewController :  UITabBarController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,12 +27,19 @@ class TabBarViewController :  UITabBarController {
         
     }
     
-    func refreshMap() {
-        println("refresh")
+    
+    //action for newPin button
+    func addUserInfo() {
+        //get storyboard and target view controller
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var resultVC = storyboard.instantiateViewControllerWithIdentifier("InfoPostViewController") as! InfoPostViewController
+        
+        //make the transition
+        self.presentViewController(resultVC, animated: true, completion: nil)
     }
     
-    func addUserInfo() {
-        println("newUser")
+    func refreshMap() {
+        println("refresh")
     }
     
 }
