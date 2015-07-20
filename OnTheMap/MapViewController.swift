@@ -13,11 +13,10 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
-    var locations = MapData.allStudentInformation
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateMap", name: "updateMapNotify", object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,9 +28,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         super.viewWillAppear(true)
         
         //TODO: make call to Parse from here, and update list of people for display
-        
+        self.updateMap()
+
+    }
+    
+    func updateMap() {
         var annotations = [MKPointAnnotation]()
-        annotations = MapData.sharedInstance().placePins(locations)
+        annotations = MapData.sharedInstance().placePins(MapData.allUserInformation)
+        println("RRRREFRESHED DATA:\(MapData.allUserInformation)")
         self.mapView.addAnnotations(annotations)
     }
 

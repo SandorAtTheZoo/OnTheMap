@@ -11,42 +11,50 @@ import MapKit
 
 class MapData: NSObject {
     
+    static var allUserInformation : [StudentInformation] = [StudentInformation]()//= MapData.addStudentInformation(MapData.locData())
+    
+    override init() {
+        super.init()
+        MapData.addStudentInformation(MapData.locData())
+    }
+    
     struct StudentInformation {
-        var createdAt : String
-        var firstName : String
-        var lastName : String
-        var latitude : Double
-        var longitude : Double
-        var mapString : String
-        var mediaURL : String
-        var objectID : String
-        var uniqueKey : Int
-        var updatedAt : String
+        var createdAt : String?
+        var firstName : String?
+        var lastName : String?
+        var latitude : Double?
+        var longitude : Double?
+        var mapString : String?
+        var mediaURL : String?
+        var objectID : String?
+        var uniqueKey : Int?
+        var updatedAt : String?
         
         //generate students from provided dictionary
         init(dict: [String:AnyObject]) {
-            self.createdAt = dict["createdAt"] as! String
-            self.firstName = dict["firstName"] as! String
-            self.lastName = dict["lastName"] as! String
-            self.latitude = dict["latitude"] as! Double
-            self.longitude = dict["longitude"] as! Double
-            self.mapString = dict["mapString"] as! String
-            self.mediaURL = dict["mediaURL"] as! String
-            self.objectID = dict["objectId"] as! String
-            self.uniqueKey = dict["uniqueKey"] as! Int
-            self.updatedAt = dict["updatedAt"] as! String
+            self.createdAt = dict["createdAt"] as? String
+            self.firstName = dict["firstName"] as? String
+            self.lastName = dict["lastName"] as? String
+            self.latitude = dict["latitude"] as? Double
+            self.longitude = dict["longitude"] as? Double
+            self.mapString = dict["mapString"] as? String
+            self.mediaURL = dict["mediaURL"] as? String
+            self.objectID = dict["objectId"] as? String
+            self.uniqueKey = dict["uniqueKey"] as? Int
+            self.updatedAt = dict["updatedAt"] as? String
         }
     }
     
         //TODO: create student variable
         //TODO: create functions as needed to update person from JSON?
-    static var allStudentInformation : [StudentInformation] {
-        var studentArray = [StudentInformation]()
+    static func addStudentInformation(studentArray:[[String:AnyObject]]) {//-> [StudentInformation] {
+        var locArray = [StudentInformation]()
         
-        for item in MapData.locData() {
-            studentArray.append(StudentInformation(dict: item))
+        for item in studentArray {
+            locArray.append(StudentInformation(dict: item))
         }
-        return studentArray
+        MapData.allUserInformation = locArray
+        //return studentArray
     }
     
     func placePins(studentLocations: [MapData.StudentInformation])->[MKPointAnnotation] {
@@ -54,21 +62,27 @@ class MapData: NSObject {
         
         for dictionary in studentLocations {
             //prepare location data
-            let lat = CLLocationDegrees(dictionary.latitude)
-            let long = CLLocationDegrees(dictionary.longitude)
-            let coordinate = CLLocationCoordinate2DMake(lat, long)
-            let first = dictionary.firstName
-            let last = dictionary.lastName
-            let mediaURL = dictionary.mediaURL
-            
-            //create annotation and set coordinate, title, and subtitle properties
-            var annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = "\(first) \(last)"
-            annotation.subtitle = mediaURL
-            
-            //put this annotation in array of annotations
-            annotations.append(annotation)
+            //due to garbage in the Parse data, everything went to optionals, adding the if/let s
+            if let latLoc = dictionary.latitude {
+                let lat = CLLocationDegrees(dictionary.latitude!)
+                if let longLoc = dictionary.longitude {
+                    let long = CLLocationDegrees(dictionary.longitude!)
+                    let coordinate = CLLocationCoordinate2DMake(lat, long)
+                    
+                    let first = dictionary.firstName
+                    let last = dictionary.lastName
+                    let mediaURL = dictionary.mediaURL
+                    
+                    //create annotation and set coordinate, title, and subtitle properties
+                    var annotation = MKPointAnnotation()
+                    annotation.coordinate = coordinate
+                    annotation.title = "\(first) \(last)"
+                    annotation.subtitle = mediaURL
+                    
+                    //put this annotation in array of annotations
+                    annotations.append(annotation)
+                }
+            }
         }
         return annotations
     }

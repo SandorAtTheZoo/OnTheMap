@@ -53,6 +53,10 @@ class TabBarViewController :  UITabBarController {
     
     func refreshMap() {
         println("refresh")
+        UserNWClient.sharedInstance().getStudentLocations({(success, errorString) in
+            if success {
+                NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
+            }
+        })
     }
-    
 }

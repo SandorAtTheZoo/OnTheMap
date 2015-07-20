@@ -114,7 +114,33 @@ class UserNWClient : NSObject {
 //            completionHandler(result: parsedResult, error: nil)
 //        }
 //    }
-    
+    func getStudentLocations(completionHandler:(success:Bool, errorString:String?)->Void) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request){data, response, error in
+            if error != nil {
+                println("failed in parse call")
+            }
+            println("parse call : ")
+            //println(NSString(data: data , encoding: NSUTF8StringEncoding))
+            var parseError : NSError? = nil
+            if let locs = NSJSONSerialization.JSONObjectWithData(data , options: NSJSONReadingOptions.AllowFragments, error: &parseError) as? NSDictionary {
+                if let users = locs.valueForKey("results") as? [[String:AnyObject]] {
+                    println("OOOOOOOOOOOOO")
+                    MapData.addStudentInformation(users)
+                    completionHandler(success: true, errorString: nil)
+                } else {
+                    completionHandler(success: false, errorString: "failed to parse users from results")
+                }
+            } else {
+                completionHandler(success: false, errorString: "failed to parse data from Parse")
+            }
+        }
+        task.resume()
+    }
 
     class func sharedInstance() -> UserNWClient {
         

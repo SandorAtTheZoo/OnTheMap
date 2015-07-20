@@ -276,7 +276,7 @@
         <!--Map-->
         <scene sceneID="Zdk-Np-MMp">
             <objects>
-                <viewController id="Gac-K1-OKN" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="mapViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gac-K1-OKN" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WSb-Lb-yuN"/>
                         <viewControllerLayoutGuide type="bottom" id="gzc-Xf-sEu"/>

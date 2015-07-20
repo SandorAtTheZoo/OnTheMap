@@ -28,20 +28,20 @@ class LoginViewController : UIViewController {
             "createdAt" : "2015-02-24T22:27:14.456Z",
             "firstName" : "NoOne",
             "lastName" : "Johnson",
-            "latitude" : 28.1461248,
-            "longitude" : -82.75676799999999,
-            "mapString" : "Tarpon Springs, FL",
-            "mediaURL" : "www.linkedin.com/in/jessicauelmen/en",
+            "latitude" : 28.5461248,
+            "longitude" : -82.95676799999999,
+            "mapString" : "Around",
+            "mediaURL" : "www.linkedin.com",
             "objectId" : "kj18GEaWD8",
             "uniqueKey" : 872458750,
             "updatedAt" : "2015-03-09T22:07:09.593Z"
         ]
         let aStu = MapData.StudentInformation(dict:newStu)
         
-        var stu = MapData.allStudentInformation
-        println("stu:\(stu)")
-        stu.append(aStu)
-        for item in stu {
+        
+        println("stu:\(MapData.allUserInformation)")
+        MapData.allUserInformation.append(aStu)
+        for item in MapData.allUserInformation {
             var info = item.lastName
             println("last:\(info)")
         }
