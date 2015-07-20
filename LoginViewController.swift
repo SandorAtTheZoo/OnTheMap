@@ -14,12 +14,14 @@ class LoginViewController : UIViewController {
     @IBOutlet weak var authPassword: UITextField!
     @IBOutlet weak var authError: UILabel!
     
-    var au = AuthUserData()
     var nwClient = UserNWClient()
+    var appDelegate : AppDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        /* Get the app delegate */
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     }
     
     override func didReceiveMemoryWarning() {
@@ -29,7 +31,7 @@ class LoginViewController : UIViewController {
     
     @IBAction func submitLogin(sender: UIButton) {
         //TODO: call POST method for login, and handle error and status as closure
-        nwClient.authSignIn(au.baseURL, httpBody: au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errorString) in
+        nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errorString) in
             if success {
                 self.completeLogin()
             } else {
@@ -37,7 +39,7 @@ class LoginViewController : UIViewController {
             }
         }
         //clear struct of name/pw
-        au.authUser("", pw: "")
+        appDelegate.au.authUser("", pw: "")
         //TODO: assign HTTPBody with blank info after login to clear struct fields
         
     }
@@ -49,7 +51,8 @@ class LoginViewController : UIViewController {
     func completeLogin() {
         dispatch_async(dispatch_get_main_queue(), {
             self.authError.text = ""
-            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapNavigationController") as! UINavigationController
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("MapNavigationController") as! MapNavigationController
+            
             self.presentViewController(controller, animated: true, completion: nil)
         })
     }

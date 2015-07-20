@@ -24,9 +24,6 @@ class UserNWClient : NSObject {
         /* 2. Build the URL */
         let url = NSURL(string: urlString)!
         
-        println("url :\(urlString)")
-        println("httpBody : \(httpBody)")
-        
         /* 3. Configure the request */
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
@@ -72,6 +69,35 @@ class UserNWClient : NSObject {
         }
         
         /* 7. Start the request */
+        task.resume()
+    }
+    
+    func logout(urlString: String, completionHandler: (success:Bool, errorString:String?)->Void) {
+        //identify url
+        let url = NSURL(string: urlString)!
+        //configure request
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "DELETE"
+        var xsrfCookie: NSHTTPCookie? = nil
+        
+        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in sharedCookieStorage.cookies as! [NSHTTPCookie] {
+            if cookie.name == "XSRF-TOKEN" {xsrfCookie = cookie}
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.addValue(xsrfCookie.value!, forHTTPHeaderField: "X-XSRF-Token")
+        }
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) {data, response, error in
+            if error != nil {
+                completionHandler(success: false, errorString: "failed to logout")
+            } else {
+                completionHandler(success: true, errorString: nil)
+            }
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length-5))
+            println(NSString(data:newData, encoding:NSUTF8StringEncoding))
+        }
         task.resume()
     }
     

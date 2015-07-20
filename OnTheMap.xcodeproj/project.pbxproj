@@ -23,6 +23,7 @@
 		37EA74BD1B5B2F7E0077C33B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74BC1B5B2F7E0077C33B /* LoginViewController.swift */; };
 		37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74BE1B5B30B70077C33B /* TableViewController.swift */; };
 		37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */; };
+		37EF5CB81B5D4F49001DDC52 /* MapNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF5CB71B5D4F49001DDC52 /* MapNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		37EA74BC1B5B2F7E0077C33B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ../LoginViewController.swift; sourceTree = "<group>"; };
 		37EA74BE1B5B30B70077C33B /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		37EF5CB71B5D4F49001DDC52 /* MapNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				37EA74BE1B5B30B70077C33B /* TableViewController.swift */,
 				37EA74C11B5B37FC0077C33B /* TabBarViewController.swift */,
 				37E56A481B5BFD6200FA38D0 /* InfoPostViewController.swift */,
+				37EF5CB71B5D4F49001DDC52 /* MapNavigationController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				37EA74C21B5B37FC0077C33B /* TabBarViewController.swift in Sources */,
 				3728A8701B5C2BBC00558C4E /* StudentInformation.swift in Sources */,
 				37E56A491B5BFD6200FA38D0 /* InfoPostViewController.swift in Sources */,
+				37EF5CB81B5D4F49001DDC52 /* MapNavigationController.swift in Sources */,
 				37EA74BF1B5B30B70077C33B /* TableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
