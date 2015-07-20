@@ -101,19 +101,6 @@ class UserNWClient : NSObject {
         task.resume()
     }
     
-//    /* Helper: Given raw JSON, return a usable Foundation object */
-//    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-//        
-//        var parsingError: NSError? = nil
-//        
-//        let parsedResult: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)
-//        
-//        if let error = parsingError {
-//            completionHandler(result: nil, error: error)
-//        } else {
-//            completionHandler(result: parsedResult, error: nil)
-//        }
-//    }
     func getStudentLocations(completionHandler:(success:Bool, errorString:String?)->Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")

@@ -23,28 +23,27 @@ class LoginViewController : UIViewController {
         /* Get the app delegate */
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        //debug studentInformation
-        let newStu = [
-            "createdAt" : "2015-02-24T22:27:14.456Z",
-            "firstName" : "NoOne",
-            "lastName" : "Johnson",
-            "latitude" : 28.5461248,
-            "longitude" : -82.95676799999999,
-            "mapString" : "Around",
-            "mediaURL" : "www.linkedin.com",
-            "objectId" : "kj18GEaWD8",
-            "uniqueKey" : 872458750,
-            "updatedAt" : "2015-03-09T22:07:09.593Z"
-        ]
-        let aStu = MapData.StudentInformation(dict:newStu)
-        
-        
-        println("stu:\(MapData.allUserInformation)")
-        MapData.allUserInformation.append(aStu)
-        for item in MapData.allUserInformation {
-            var info = item.lastName
-            println("last:\(info)")
-        }
+//        //debug studentInformation
+//        let newStu = [
+//            "createdAt" : "2015-02-24T22:27:14.456Z",
+//            "firstName" : "NoOne",
+//            "lastName" : "Johnson",
+//            "latitude" : 28.5461248,
+//            "longitude" : -82.95676799999999,
+//            "mapString" : "Around",
+//            "mediaURL" : "www.linkedin.com",
+//            "objectId" : "kj18GEaWD8",
+//            "uniqueKey" : 872458750,
+//            "updatedAt" : "2015-03-09T22:07:09.593Z"
+//        ]
+//        let aStu = MapData.StudentInformation(dict:newStu)
+//        
+//        
+//        println("stu:\(MapData.allUserInformation)")
+//        MapData.allUserInformation.append(aStu)
+//        for item in MapData.allUserInformation {
+//            var info = item.lastName
+//        }
     }
     
     override func didReceiveMemoryWarning() {
