@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController : UIViewController {
+class LoginViewController : UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var authUsername: UITextField!
     @IBOutlet weak var authPassword: UITextField!
@@ -22,6 +22,8 @@ class LoginViewController : UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         /* Get the app delegate */
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        authPassword.delegate = self
         
 //        //debug studentInformation
 //        let newStu = [
@@ -52,7 +54,21 @@ class LoginViewController : UIViewController {
     }
     
     @IBAction func submitLogin(sender: UIButton) {
-        //TODO: call POST method for login, and handle error and status as closure
+        startLogin()
+    }
+    
+    //TODO: create new account
+    @IBAction func signUpNewAccount(sender: UIButton) {
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        startLogin()
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func startLogin() {
+        //call POST method for login, and handle error and status as closure
         nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errorString) in
             if success {
                 self.completeLogin()
@@ -62,12 +78,7 @@ class LoginViewController : UIViewController {
         }
         //clear struct of name/pw
         appDelegate.au.authUser("", pw: "")
-        //TODO: assign HTTPBody with blank info after login to clear struct fields
         
-    }
-    
-    //TODO: create new account
-    @IBAction func signUpNewAccount(sender: UIButton) {
     }
     
     func completeLogin() {

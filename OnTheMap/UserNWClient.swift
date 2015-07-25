@@ -43,7 +43,6 @@ class UserNWClient : NSObject {
                 /* 5. Parse the data */
                 var parsingError: NSError? = nil
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                println("new data : \(newData)")
                 if let parsedResult = NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as? NSDictionary {
                     
                     /* 6. Use the data! */
@@ -102,7 +101,7 @@ class UserNWClient : NSObject {
     }
     
     func getStudentLocations(completionHandler:(success:Bool, errorString:String?)->Void) {
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation?limit=100")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         
@@ -111,7 +110,6 @@ class UserNWClient : NSObject {
             if error != nil {
                 println("failed in parse call")
             }
-            println("parse call : ")
             //println(NSString(data: data , encoding: NSUTF8StringEncoding))
             var parseError : NSError? = nil
             if let locs = NSJSONSerialization.JSONObjectWithData(data , options: NSJSONReadingOptions.AllowFragments, error: &parseError) as? NSDictionary {

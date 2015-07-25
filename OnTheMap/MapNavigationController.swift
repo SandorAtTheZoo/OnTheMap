@@ -12,10 +12,6 @@ class MapNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        //logged in, instantiate MapData class
-        var mapData = MapData()
     }
 
     override func didReceiveMemoryWarning() {

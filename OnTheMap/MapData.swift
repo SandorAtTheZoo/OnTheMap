@@ -48,7 +48,7 @@ class MapData: NSObject {
         //TODO: create student variable
         //TODO: create functions as needed to update person from JSON?
     static func addStudentInformation(studentArray:[[String:AnyObject]]) {//-> [StudentInformation] {
-        var locArray = [StudentInformation]()
+        var locArray = MapData.allUserInformation
         
         for item in studentArray {
             locArray.append(StudentInformation(dict: item))
@@ -69,18 +69,19 @@ class MapData: NSObject {
                     let long = CLLocationDegrees(dictionary.longitude!)
                     let coordinate = CLLocationCoordinate2DMake(lat, long)
                     
-                    let first = dictionary.firstName
-                    let last = dictionary.lastName
-                    let mediaURL = dictionary.mediaURL
-                    
-                    //create annotation and set coordinate, title, and subtitle properties
-                    var annotation = MKPointAnnotation()
-                    annotation.coordinate = coordinate
-                    annotation.title = "\(first) \(last)"
-                    annotation.subtitle = mediaURL
-                    
-                    //put this annotation in array of annotations
-                    annotations.append(annotation)
+                    if let first = dictionary.firstName {
+                        if let last = dictionary.lastName {
+                            if let mediaURL = dictionary.mediaURL {
+                                //create annotation and set coordinate, title, and subtitle properties
+                                var annotation = MKPointAnnotation()
+                                annotation.coordinate = coordinate
+                                annotation.title = "\(first) \(last)"
+                                annotation.subtitle = mediaURL
+                                //put this annotation in array of annotations
+                                annotations.append(annotation)
+                            }
+                        }
+                    }
                 }
             }
         }

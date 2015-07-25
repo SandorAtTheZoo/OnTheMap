@@ -17,6 +17,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateMap", name: "updateMapNotify", object: nil)
+        mapView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,7 +37,11 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         var annotations = [MKPointAnnotation]()
         annotations = MapData.sharedInstance().placePins(MapData.allUserInformation)
         println("RRRREFRESHED DATA:")
-        self.mapView.addAnnotations(annotations)
+
+        dispatch_async(dispatch_get_main_queue(), {
+            self.mapView.addAnnotations(annotations)
+        })
+        
     }
 
 }
