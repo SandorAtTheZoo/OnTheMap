@@ -14,13 +14,17 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        //reload data when user refreshes the map
-        mapTableView.reloadData()
+        //update table on user refresh
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadUserData", name: "updateMapNotify", object: nil)
+        reloadUserData()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,6 +54,18 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        //TODO: add call to browser here
+        //add call to browser here
+        let app = UIApplication.sharedApplication()
+        app.openURL(NSURL(string: MapData.allUserInformation[indexPath.row].mediaURL!)!)
+    }
+    
+    func reloadUserData() {
+        //updates table after refresh.  needed to use GCD to schedule it
+        //otherwise table did not update, even when using reload data
+        dispatch_async(dispatch_get_main_queue(), {
+            //reload data when user refreshes the map
+            self.mapTableView.reloadData()
+        })
+
     }
 }
