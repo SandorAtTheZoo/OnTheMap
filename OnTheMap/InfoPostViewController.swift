@@ -8,8 +8,17 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class InfoPostViewController: UIViewController, MKMapViewDelegate {
+
+    @IBOutlet weak var findLocationOutlet: UIButton!
+    @IBOutlet weak var locationText: UITextField!
+    @IBOutlet weak var locationPanel: UIView!
+    @IBOutlet weak var findButtonPanel: UIView!
+    @IBOutlet weak var mapViewPanel: MKMapView!
+    
+    var userLoc : CLLocation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,5 +44,42 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    @IBAction func findLocation(sender: UIButton) {
+        findLocationOutlet.enabled = false
+        findLocationOutlet.titleLabel?.text = "please wait, working..."
+        if locationText.text != "" {
+            var geoCode = CLGeocoder()
+            geoCode.geocodeAddressString(locationText.text, completionHandler: {(placemarks, error) in
+                for items in placemarks {
+                    let name = items.name
+                    let loc = items.addressDictionary
+                    self.userLoc = items.location
+                    println("placemark : \(items)\n name : \(name)\n location:\(loc)\n\n loc2: \(self.userLoc)")
+                }
+                //TODO: hide panels and stuff, show map, and add pin to map with location
+                self.locationText.hidden = true
+                self.locationPanel.hidden = true
+                self.findButtonPanel.hidden = true
+                self.mapViewPanel.hidden = false
+                self.updateLoc()
+            })
+        }
+        
+    }
+    
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        var myReuse = "here"
+        var myPin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: myReuse)
+        myPin.pinColor = .Red
+        return myPin
+    }
+    
+    func updateLoc() {
+        var annotation = MKPointAnnotation()
+        annotation.coordinate = userLoc.coordinate
+        dispatch_async(dispatch_get_main_queue(), {
+            self.mapViewPanel.addAnnotation(annotation)
+        })
+    }
 
 }
