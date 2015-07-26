@@ -11,7 +11,7 @@ import MapKit
 
 class MapData: NSObject {
     
-    static var allUserInformation : [StudentInformation] = [StudentInformation]()//= MapData.addStudentInformation(MapData.locData())
+    static var allUserInformation : [StudentInformation] = [StudentInformation]()
     
     override init() {
         super.init()
@@ -45,16 +45,15 @@ class MapData: NSObject {
         }
     }
     
-        //TODO: create student variable
-        //TODO: create functions as needed to update person from JSON?
-    static func addStudentInformation(studentArray:[[String:AnyObject]]) {//-> [StudentInformation] {
+        //create student variable
+        //create functions as needed to update person from JSON
+    static func addStudentInformation(studentArray:[[String:AnyObject]]) {
         var locArray = MapData.allUserInformation
         
         for item in studentArray {
             locArray.append(StudentInformation(dict: item))
         }
         MapData.allUserInformation = locArray
-        //return studentArray
     }
     
     func placePins(studentLocations: [MapData.StudentInformation])->[MKPointAnnotation] {
@@ -86,6 +85,22 @@ class MapData: NSObject {
             }
         }
         return annotations
+    }
+    
+    static func newStudent() -> StudentInformation {
+        var newStu = [
+            "createdAt" : "",
+            "firstName" : "",
+            "lastName" : "",
+            "latitude" : 0,
+            "longitude" : 0,
+            "mapString" : "",
+            "mediaURL" : "",
+            "objectId" : "",
+            "uniqueKey" : 0,
+            "updatedAt" : ""
+        ]
+        return MapData.StudentInformation(dict: newStu)
     }
     
     //apparently this method of singleton is a workaround for swift 1.1 inability to handle static class constants...

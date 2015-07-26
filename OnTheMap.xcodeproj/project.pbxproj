@@ -106,9 +106,7 @@
 				37EA749E1B5AD8AF0077C33B /* LaunchScreen.xib */,
 				37EA74B51B5ADDE50077C33B /* Resources */,
 				37EA74931B5AD8AF0077C33B /* Supporting Files */,
-				3755DC371B5B4876008B3011 /* UserNWClient.swift */,
-				3728A86D1B5C2A8400558C4E /* AuthUserData.swift */,
-				3728A86F1B5C2BBC00558C4E /* MapData.swift */,
+				37F249A21B65579A00E124B9 /* models */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -159,6 +157,16 @@
 				37EF5CB71B5D4F49001DDC52 /* MapNavigationController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		37F249A21B65579A00E124B9 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				3755DC371B5B4876008B3011 /* UserNWClient.swift */,
+				3728A86D1B5C2A8400558C4E /* AuthUserData.swift */,
+				3728A86F1B5C2BBC00558C4E /* MapData.swift */,
+			);
+			name = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

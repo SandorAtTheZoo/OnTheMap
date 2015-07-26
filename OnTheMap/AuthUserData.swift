@@ -10,6 +10,7 @@ import Foundation
 
 struct AuthUserData {
     let baseURL = "https://www.udacity.com/api/session"
+    let getInfoURL = "https://www.udacity.com/api/users/"
     var userID : String? = nil
     
     var httpBody : [String : [String:String]] = [

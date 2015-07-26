@@ -38,7 +38,7 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
         let user = MapData.allUserInformation[indexPath.row]
         
         //set cell to user data
-        cell.textLabel?.text = user.firstName! + user.lastName!
+        cell.textLabel?.text = user.firstName! + " " + user.lastName!
         cell.detailTextLabel?.text = user.mediaURL!
         
         return cell

@@ -11,6 +11,7 @@ import UIKit
 class UserNWClient : NSObject {
     
     var testData : Int? = nil
+    var appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override init() {
         super.init()
@@ -50,6 +51,7 @@ class UserNWClient : NSObject {
                         //TODO: reference closure data here for pass by reference?
                         if let user = loggedIn["key"] as? String {
                             println("user ID : \(user)")
+                            self.appDelegate.au.userID = user
                             completionHandler(success: true, errorString: nil)
                         } else {
                             println("no user ID acquired")
@@ -68,6 +70,33 @@ class UserNWClient : NSObject {
         }
         
         /* 7. Start the request */
+        task.resume()
+    }
+    
+    func authGetInfo(completionHandler: (userDictionary: NSDictionary?, success:Bool, errorString:String?)->Void) {
+        //build URL
+        var urlString = appDelegate.au.getInfoURL + appDelegate.au.userID!
+        println("urlString : \(urlString)")
+        let url = NSURL(string: urlString)!
+        
+        //configure and make request
+        var parsingError : NSError?
+        let request = NSURLRequest(URL: url)
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, getError) in
+            if let error = getError {
+                completionHandler(userDictionary: nil, success: false, errorString: "failed to connect to server")
+            } else {
+                //parse data
+                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
+                if let dataResult = NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments, error: &parsingError) as? NSDictionary {
+                    if let userData = dataResult["user"] as? NSDictionary {
+                        completionHandler(userDictionary: userData, success: true, errorString: nil)
+                    }
+                }
+            }
+        })
+        //start request
         task.resume()
     }
     
