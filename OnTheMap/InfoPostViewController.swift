@@ -22,6 +22,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var errorInfo: UILabel!
     @IBOutlet weak var submitButt: UIButton!
     @IBOutlet var topView: UIView!
+    @IBOutlet weak var buttonViewPanel: UIView!
     
     var userLoc : CLLocation!
     var currStudent : MapData.StudentInformation = MapData.newStudent()
@@ -38,7 +39,16 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        subscribeToKeyboardNotifications()
+    }
 
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        unsubscribeFromKeyboardNotifications()
+    }
+    
     @IBAction func returnToDisplay(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -54,6 +64,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     @IBAction func findLocation(sender: UIButton) {
         findLocationOutlet.enabled = false
         findLocationOutlet.titleLabel?.text = "working..."
+        self.locationText.endEditing(true)
         if locationText.text != "" {
             var geoCode = CLGeocoder()
             geoCode.geocodeAddressString(locationText.text, completionHandler: {(placemarks, error) in
@@ -80,6 +91,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         if let urlString = NSURL(string: userWebField.text) {
             //success
             errorInfo.text = ""
+            userWebField.endEditing(true)
             currStudent.mediaURL = userWebField.text
             
             //TODO: POST to Parse server
@@ -146,6 +158,38 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         region.span.latitudeDelta = CLLocationDegrees(0.15)
         region.span.longitudeDelta = CLLocationDegrees(0.15)
         mapViewPanel.setRegion(region, animated: true)
+    }
+    
+    //keyboard helper methods...can't push button when entering location text
+    //know when keyboard rises and falls
+    func subscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    //release notification when leaving the view
+    func unsubscribeFromKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    //called as selector from 'subscribeToKeyboardNotifications'
+    //adjusts view frame to shift up display when keyboard shows
+    func keyboardWillShow(notification: NSNotification) {
+        if (locationText.isFirstResponder()) {
+            self.findLocationOutlet.center.y -= getKeyboardHeight(notification)
+        }
+    }
+    //called as selector from 'subscribeToKeyboardNotifications'
+    //adjusts view frame to shift down display when keyboard hides
+    func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y < 0 {
+            self.findLocationOutlet.center.y += getKeyboardHeight(notification)
+        }
+    }
+    //find out how tall keyboard is to know how much to shift display when it shows/hides
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue //of CGRect
+        return keyboardSize.CGRectValue().height
     }
 
 }
