@@ -72,7 +72,6 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     func updateMap() {
         var annotations = [MKPointAnnotation]()
         annotations = MapData.sharedInstance().placePins(MapData.allUserInformation)
-        println("RRRREFRESHED DATA:")
 
         dispatch_async(dispatch_get_main_queue(), {
             self.mapView.addAnnotations(annotations)

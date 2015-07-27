@@ -48,9 +48,8 @@ class UserNWClient : NSObject {
                     
                     /* 6. Use the data! */
                     if let loggedIn = parsedResult["account"] as? NSDictionary {
-                        //TODO: reference closure data here for pass by reference?
+                        //reference closure data here for pass by reference?
                         if let user = loggedIn["key"] as? String {
-                            println("user ID : \(user)")
                             self.appDelegate.au.userID = user
                             completionHandler(success: true, errorString: nil)
                         } else {
@@ -92,7 +91,11 @@ class UserNWClient : NSObject {
                 if let dataResult = NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments, error: &parsingError) as? NSDictionary {
                     if let userData = dataResult["user"] as? NSDictionary {
                         completionHandler(userDictionary: userData, success: true, errorString: nil)
+                    } else {
+                        completionHandler(userDictionary: nil, success: false, errorString: "failed to find user")
                     }
+                } else {
+                    completionHandler(userDictionary: nil, success: false, errorString: "no parsable JSON")
                 }
             }
         })
@@ -143,7 +146,6 @@ class UserNWClient : NSObject {
             var parseError : NSError? = nil
             if let locs = NSJSONSerialization.JSONObjectWithData(data , options: NSJSONReadingOptions.AllowFragments, error: &parseError) as? NSDictionary {
                 if let users = locs.valueForKey("results") as? [[String:AnyObject]] {
-                    println("OOOOOOOOOOOOO")
                     MapData.addStudentInformation(users)
                     completionHandler(success: true, errorString: nil)
                 } else {
@@ -152,6 +154,28 @@ class UserNWClient : NSObject {
             } else {
                 completionHandler(success: false, errorString: "failed to parse data from Parse")
             }
+        }
+        task.resume()
+    }
+    
+    func postStudentLocation(httpBody:String, completionHandler:(success:Bool, errorString:String?)->Void) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
+        request.HTTPMethod = "POST"
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) {data, response, error in
+            if error != nil {
+                //handle error
+                completionHandler(success: false, errorString: "Failed to POST student data to server")
+            } else {
+                completionHandler(success: true, errorString: nil)
+                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            }
+            
         }
         task.resume()
     }

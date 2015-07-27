@@ -62,14 +62,14 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     }
     */
     @IBAction func findLocation(sender: UIButton) {
-        findLocationOutlet.enabled = false
-        findLocationOutlet.titleLabel?.text = "working..."
         self.locationText.endEditing(true)
         if locationText.text != "" {
+            errorInfo.text = "working..."
             var geoCode = CLGeocoder()
             geoCode.geocodeAddressString(locationText.text, completionHandler: {(placemarks, error) in
                 if let geoError = error {
                     //add error code here
+                    Alert(viewC: self, title: "Geocode error", errorString: "could not geocode location")
                 } else {
                     for items in placemarks {
                         let name = items.name
@@ -77,10 +77,19 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                         self.userLoc = items.location
                         self.currStudent.latitude = self.userLoc.coordinate.latitude
                         self.currStudent.longitude = self.userLoc.coordinate.longitude
+                        self.currStudent.mapString = items.name
                         //println("placemark : \(items)\n name : \(name)\n location:\(loc)\n\n loc2: \(self.userLoc)")
                     }
                     self.updateLoc()
                 }
+            })
+            errorInfo.text = "geocoding complete"
+            
+            var delayInSeconds = 1.0 * Double(NSEC_PER_SEC)
+            var popTime : dispatch_time_t
+            popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds))
+            dispatch_after(popTime, dispatch_get_main_queue(), {
+                self.errorInfo.text = ""
             })
         }
         
@@ -90,24 +99,29 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         //check valid URL
         if let urlString = NSURL(string: userWebField.text) {
             //success
-            errorInfo.text = ""
+            //errorInfo.text = ""
             userWebField.endEditing(true)
             currStudent.mediaURL = userWebField.text
             
-            //TODO: POST to Parse server
-            
-            println("currStudent : \(currStudent)")
             MapData.allUserInformation.append(currStudent)
             
             //return to map screen
             self.dismissViewControllerAnimated(true, completion: nil)
         } else {
             //bad URL
-            errorInfo.text = "bad URL entered, try again"
+            //errorInfo.text = "bad URL entered, try again"
+            Alert(viewC: self, title: "Bad URL", errorString: "Not a valid URL")
         }
-        //TODO: POST user info to the Parse server
-        println("POST to server")
-        //TODO: on success, return to map view and refresh by notify
+        //POST user info to the Parse server
+        var httpData = MapData.dictionaryFromStudentForPost(currStudent)
+
+        nwClient.postStudentLocation(httpData, completionHandler: {success, error in
+            if success {
+                println("successful POST")
+            } else {
+                Alert(viewC: self, title: "Student Info Error", errorString: error!)
+            }
+        })
     }
     
     
@@ -135,7 +149,6 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
             self.zoomToLocation()
             self.nwClient.authGetInfo({userDict, success, errorStr in
                 if success {
-                    println("udacity GET success!!")
                     self.currStudent.firstName = userDict!["first_name"] as? String
                     self.currStudent.lastName = userDict!["last_name"] as? String
                 } else {
@@ -176,6 +189,9 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     func keyboardWillShow(notification: NSNotification) {
         if (locationText.isFirstResponder()) {
             self.findLocationOutlet.center.y -= getKeyboardHeight(notification)
+        }
+        if userWebField.isFirstResponder() {
+            errorInfo.text = ""
         }
     }
     //called as selector from 'subscribeToKeyboardNotifications'

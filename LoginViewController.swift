@@ -54,7 +54,8 @@ class LoginViewController : UIViewController, UITextFieldDelegate {
             if success {
                 self.completeLogin()
             } else {
-                self.displayError(errorString)
+                //self.displayError(errorString)
+                Alert(viewC: self, title: "Login Error", errorString: errorString!)
             }
         }
         //clear struct of name/pw

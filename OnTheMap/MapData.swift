@@ -56,6 +56,22 @@ class MapData: NSObject {
         MapData.allUserInformation = locArray
     }
     
+    static func dictionaryFromStudentForPost(aStudent:StudentInformation)-> String {
+        var tempDict = NSMutableDictionary()
+        tempDict["firstName"] = aStudent.firstName
+        tempDict["lastName"] = aStudent.lastName
+        tempDict["latitude"] = aStudent.latitude
+        tempDict["longitude"] = aStudent.longitude
+        tempDict["mapString"] = aStudent.mapString
+        tempDict["mediaURL"] = aStudent.mediaURL
+        tempDict["uniqueKey"] = "4913"
+        
+        var convData = NSJSONSerialization.dataWithJSONObject(tempDict, options: nil, error: nil)
+        var finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
+        
+        return finalData as! String
+    }
+    
     func placePins(studentLocations: [MapData.StudentInformation])->[MKPointAnnotation] {
         var annotations = [MKPointAnnotation]()
         

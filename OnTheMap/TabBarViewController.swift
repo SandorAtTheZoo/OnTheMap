@@ -24,8 +24,6 @@ class TabBarViewController :  UITabBarController {
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
     }
-    
-    
     @IBAction func logoutUser(sender: UIBarButtonItem) {
         UserNWClient.sharedInstance().logout(appDelegate.au.baseURL) {(success, errorString) in
             if success {
@@ -34,7 +32,8 @@ class TabBarViewController :  UITabBarController {
                 self.presentViewController(controller, animated: true, completion: nil)
                 })
             } else {
-                println("failed to transition")
+                println("failed to logout")
+                Alert(viewC: self, title: "Logout Error", errorString: "failed to logout")
             }
         }
         
@@ -52,10 +51,11 @@ class TabBarViewController :  UITabBarController {
     }
     
     func refreshMap() {
-        println("refresh")
         UserNWClient.sharedInstance().getStudentLocations({(success, errorString) in
             if success {
                 NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
+            } else {
+                Alert(viewC: self, title: "Refresh Failure", errorString: errorString!)
             }
         })
     }
