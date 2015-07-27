@@ -84,7 +84,8 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                 }
             })
             errorInfo.text = "geocoding complete"
-            
+            //timer used since the geocoding goes so fast, I don't see any update
+            //http://stackoverflow.com/questions/27990085/nstimer-how-to-delay-in-swift
             var delayInSeconds = 1.0 * Double(NSEC_PER_SEC)
             var popTime : dispatch_time_t
             popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds))
