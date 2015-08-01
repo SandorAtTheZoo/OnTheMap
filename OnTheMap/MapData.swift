@@ -18,33 +18,6 @@ class MapData: NSObject {
         MapData.addStudentInformation(MapData.locData())
     }
     
-    struct StudentInformation {
-        var createdAt : String?
-        var firstName : String?
-        var lastName : String?
-        var latitude : Double?
-        var longitude : Double?
-        var mapString : String?
-        var mediaURL : String?
-        var objectID : String?
-        var uniqueKey : Int?
-        var updatedAt : String?
-        
-        //generate students from provided dictionary
-        init(dict: [String:AnyObject]) {
-            self.createdAt = dict["createdAt"] as? String
-            self.firstName = dict["firstName"] as? String
-            self.lastName = dict["lastName"] as? String
-            self.latitude = dict["latitude"] as? Double
-            self.longitude = dict["longitude"] as? Double
-            self.mapString = dict["mapString"] as? String
-            self.mediaURL = dict["mediaURL"] as? String
-            self.objectID = dict["objectId"] as? String
-            self.uniqueKey = dict["uniqueKey"] as? Int
-            self.updatedAt = dict["updatedAt"] as? String
-        }
-    }
-    
         //create student variable
         //create functions as needed to update person from JSON
     static func addStudentInformation(studentArray:[[String:AnyObject]]) {
@@ -52,6 +25,7 @@ class MapData: NSObject {
         
         for item in studentArray {
             locArray.append(StudentInformation(dict: item))
+            let anID = item["objectId"] as? String
         }
         MapData.allUserInformation = locArray
     }
@@ -72,7 +46,21 @@ class MapData: NSObject {
         return finalData as! String
     }
     
-    func placePins(studentLocations: [MapData.StudentInformation])->[MKPointAnnotation] {
+    static func findStudent(firstName : String, lastName : String, uniqueKey : String)->Bool {
+        for student in self.allUserInformation {
+            let id = student.objectID
+            if (student.firstName == firstName) && (student.lastName == lastName)  && (student.uniqueKey == uniqueKey){
+                if let uniqueID = student.objectID {
+                    let appDelegate :AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
+                    appDelegate.au.parse_objectID = uniqueID
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func placePins(studentLocations: [StudentInformation])->[MKPointAnnotation] {
         var annotations = [MKPointAnnotation]()
         
         for dictionary in studentLocations {
@@ -116,7 +104,7 @@ class MapData: NSObject {
             "uniqueKey" : 0,
             "updatedAt" : ""
         ]
-        return MapData.StudentInformation(dict: newStu)
+        return StudentInformation(dict: newStu)
     }
     
     //apparently this method of singleton is a workaround for swift 1.1 inability to handle static class constants...

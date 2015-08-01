@@ -12,6 +12,7 @@ class UserNWClient : NSObject {
     
     var testData : Int? = nil
     var appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let err = ErrorCodes()
     
     override init() {
         super.init()
@@ -38,7 +39,8 @@ class UserNWClient : NSObject {
             
             if let error = downloadError {
                 println("Could not complete the request \(error)")
-                completionHandler(success: false, errorString: "Failed to connect to login server")
+                //network not available
+                completionHandler(success: false, errorString: "could not complete request")
             } else {
                 
                 /* 5. Parse the data */
@@ -51,19 +53,31 @@ class UserNWClient : NSObject {
                         //reference closure data here for pass by reference?
                         if let user = loggedIn["key"] as? String {
                             self.appDelegate.au.userID = user
-                            completionHandler(success: true, errorString: nil)
+                            completionHandler(success: true, errorString:nil)
                         } else {
                             println("no user ID acquired")
-                            completionHandler(success: false, errorString: "no user ID acquired")
+                            //no username entered
+                            completionHandler(success: false, errorString:"no user ID entered")
                         }
                         
                     } else {
-                        println("could not find account")
-                        completionHandler(success: false, errorString: "could not find your account")
+                        if let status = parsedResult["status"] as? Int {
+                            if status == 400 || status == 403 {
+                                if let errStr = parsedResult["error"] as? String {
+                                    completionHandler(success: false, errorString: errStr)
+                                } else {
+                                    completionHandler(success: false, errorString: "login failed, no error description")
+                                }
+                            } else {
+                                completionHandler(success: false, errorString: "login error, unknown error code")
+                            }
+                        } else {
+                            completionHandler(success: false, errorString: "login error, no status")
+                        }
                     }
                 } else {
                     println("couldn not bring in data from udacity")
-                    completionHandler(success: false, errorString: "failed to get data from udacity")
+                    completionHandler(success: false, errorString:"no data returned from udacity")
                 }
             }
         }
@@ -157,7 +171,7 @@ class UserNWClient : NSObject {
         }
         task.resume()
     }
-    
+    //Parse function call
     func postStudentLocation(httpBody:String, completionHandler:(success:Bool, errorString:String?)->Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation")!)
         request.HTTPMethod = "POST"
@@ -179,7 +193,31 @@ class UserNWClient : NSObject {
         }
         task.resume()
     }
-
+    //Parse function call to update user info
+    func putStudentLocation(httpBody:String, completionHandler:(success:Bool, errorString:String?)->Void) {
+        let urlString = "https://api.parse.com/1/classes/StudentLocation/" + appDelegate.au.parse_objectID
+        let url = NSURL(string: urlString)
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "PUT"
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) {data, response, error in
+            if error != nil {
+                //handle error
+                completionHandler(success: false, errorString: "Failed to PUT student data to server")
+            } else {
+                completionHandler(success: true, errorString: nil)
+                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            }
+            
+        }
+        task.resume()
+        
+    }
     class func sharedInstance() -> UserNWClient {
         
         struct Singleton {

@@ -16,6 +16,7 @@ class LoginViewController : UIViewController, UITextFieldDelegate {
     
     var nwClient = UserNWClient()
     var appDelegate : AppDelegate!
+    let err = ErrorCodes()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,12 +51,14 @@ class LoginViewController : UIViewController, UITextFieldDelegate {
     
     func startLogin() {
         //call POST method for login, and handle error and status as closure
-        nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errorString) in
+        nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errString) in
             if success {
                 self.completeLogin()
             } else {
-                //self.displayError(errorString)
-                Alert(viewC: self, title: "Login Error", errorString: errorString!)
+                dispatch_async(dispatch_get_main_queue(), {
+                    Alert(viewC: self, title: "Login Error", errorString: errString!)
+                })
+
             }
         }
         //clear struct of name/pw

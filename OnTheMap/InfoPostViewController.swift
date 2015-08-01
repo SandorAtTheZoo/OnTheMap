@@ -23,15 +23,18 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var submitButt: UIButton!
     @IBOutlet var topView: UIView!
     @IBOutlet weak var buttonViewPanel: UIView!
+    @IBOutlet weak var activityInd: UIActivityIndicatorView!
     
     var userLoc : CLLocation!
-    var currStudent : MapData.StudentInformation = MapData.newStudent()
+    var currStudent : StudentInformation = MapData.newStudent()
     var nwClient = UserNWClient()
+    var appDelegate : AppDelegate!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,8 +66,15 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
     */
     @IBAction func findLocation(sender: UIButton) {
         self.locationText.endEditing(true)
+        
+        //try to run on GCD to get it to show
+        //using Charles to throttle data to Apple at 56k to see transition
+        dispatch_async(dispatch_get_main_queue(), {
+            //geocoding start
+            self.view.bringSubviewToFront(self.activityInd)
+            self.activityInd.startAnimating()
+        })
         if locationText.text != "" {
-            errorInfo.text = "working..."
             var geoCode = CLGeocoder()
             geoCode.geocodeAddressString(locationText.text, completionHandler: {(placemarks, error) in
                 if let geoError = error {
@@ -83,44 +93,82 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                     self.updateLoc()
                 }
             })
-            errorInfo.text = "geocoding complete"
-            //timer used since the geocoding goes so fast, I don't see any update
-            //http://stackoverflow.com/questions/27990085/nstimer-how-to-delay-in-swift
-            var delayInSeconds = 1.0 * Double(NSEC_PER_SEC)
-            var popTime : dispatch_time_t
-            popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds))
-            dispatch_after(popTime, dispatch_get_main_queue(), {
-                self.errorInfo.text = ""
-            })
+            //geocoding complete
+            //stop animating not called until map zoom in GCD, as putting a call 
+            //here seems to be too fast to display, but after the map zoom seems
+            //to provide the best user experience
         }
         
     }
     
     @IBAction func submitUserInfo(sender: UIButton) {
+        //create fake uniqueKey that happens to match what's in map data to invoke PUT or POST
+        currStudent.uniqueKey = "4913"
         //check valid URL
         if let urlString = NSURL(string: userWebField.text) {
-            //success
-            //errorInfo.text = ""
             userWebField.endEditing(true)
             currStudent.mediaURL = userWebField.text
-            
-            MapData.allUserInformation.append(currStudent)
-            
-            //return to map screen
-            self.dismissViewControllerAnimated(true, completion: nil)
         } else {
             //bad URL
             //errorInfo.text = "bad URL entered, try again"
             Alert(viewC: self, title: "Bad URL", errorString: "Not a valid URL")
         }
-        //POST user info to the Parse server
-        var httpData = MapData.dictionaryFromStudentForPost(currStudent)
-
-        nwClient.postStudentLocation(httpData, completionHandler: {success, error in
-            if success {
-                println("successful POST")
+        
+        //try to update existing student first
+        updateUserInfo({locSuccess, locError in
+            if locSuccess {
+                println("udpating student info")
+                //update student array with changes
+                MapData.allUserInformation.append(self.currStudent)
+                //return to map screen
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
             } else {
-                Alert(viewC: self, title: "Student Info Error", errorString: error!)
+                
+                //update student array with new student information
+                MapData.allUserInformation.append(self.currStudent)
+                
+                //POST user info to the Parse server
+                var httpData = MapData.dictionaryFromStudentForPost(self.currStudent)
+                
+                self.nwClient.postStudentLocation(httpData, completionHandler: {success, error in
+                    if success {
+                        println("successful POST")
+                    } else {
+                        Alert(viewC: self, title: "Student Info Error", errorString: error!)
+                    }
+                })
+            }
+        })
+        
+        
+    }
+    
+    func updateUserInfo(completionHandler: (locSuccess: Bool, locError:String?)->Void) {
+        //update user list
+        nwClient.getStudentLocations({success, errorString in
+            if success {
+                //search new list for current user info
+                if MapData.findStudent(self.currStudent.firstName!, lastName: self.currStudent.lastName!, uniqueKey: self.currStudent.uniqueKey!) {
+                    //if match, update user rather than add new user
+                    var httpData = MapData.dictionaryFromStudentForPost(self.currStudent)
+                    self.nwClient.putStudentLocation(httpData, completionHandler: {success, error in
+                        if success {
+                            println("successful PUT")
+                            completionHandler(locSuccess: true, locError: nil)
+                        } else {
+                            completionHandler(locSuccess: false, locError: nil)
+                            Alert(viewC: self, title: "Creating new user", errorString: "cannot find existing user, creating new one")
+                            println("failed PUT")
+                        }
+                    })
+                }
+            } else {
+                completionHandler(locSuccess: false, locError: "data retrieval error")
+                //issue error
+                if let errStr = errorString {
+                    Alert(viewC: self, title: "Data retrieval error", errorString: errStr)
+                }
             }
         })
     }
@@ -154,6 +202,11 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                     self.currStudent.lastName = userDict!["last_name"] as? String
                 } else {
                     //update UI string for failure
+                    if let errStr = errorStr {
+                        Alert(viewC: self, title: "Udacity Data retrieval", errorString: errStr)
+                        //cancel post and return to map screen
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
                     self.errorInfo.text = "did not retrieve user data from udacity"
                 }
             })
@@ -172,6 +225,9 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         region.span.latitudeDelta = CLLocationDegrees(0.15)
         region.span.longitudeDelta = CLLocationDegrees(0.15)
         mapViewPanel.setRegion(region, animated: true)
+        
+        //geocoding complete, map zoomed in, now remove activity indicator
+        self.activityInd.stopAnimating()
     }
     
     //keyboard helper methods...can't push button when entering location text
