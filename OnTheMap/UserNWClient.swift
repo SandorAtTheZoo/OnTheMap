@@ -40,7 +40,13 @@ class UserNWClient : NSObject {
             if let error = downloadError {
                 println("Could not complete the request \(error)")
                 //network not available
-                completionHandler(success: false, errorString: "could not complete request")
+                //http://stackoverflow.com/questions/29122066/nsurlsession-error-handling
+                if error.domain == NSURLErrorDomain && error.code == NSURLErrorNotConnectedToInternet {
+                    completionHandler(success: false, errorString: "Not connected to the Internet")
+                } else {
+                    completionHandler(success: false, errorString: "Network problems")
+                }
+
             } else {
                 
                 /* 5. Parse the data */

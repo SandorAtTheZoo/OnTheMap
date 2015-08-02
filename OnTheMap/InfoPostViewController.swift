@@ -120,6 +120,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                 println("udpating student info")
                 //update student array with changes
                 MapData.allUserInformation.append(self.currStudent)
+                NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
                 //return to map screen
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
@@ -134,14 +135,13 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
                 self.nwClient.postStudentLocation(httpData, completionHandler: {success, error in
                     if success {
                         println("successful POST")
+                        NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
                     } else {
                         Alert(viewC: self, title: "Student Info Error", errorString: error!)
                     }
                 })
             }
         })
-        
-        
     }
     
     func updateUserInfo(completionHandler: (locSuccess: Bool, locError:String?)->Void) {

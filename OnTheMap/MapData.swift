@@ -25,7 +25,6 @@ class MapData: NSObject {
         
         for item in studentArray {
             locArray.append(StudentInformation(dict: item))
-            let anID = item["objectId"] as? String
         }
         MapData.allUserInformation = locArray
     }
