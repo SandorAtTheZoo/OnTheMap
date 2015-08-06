@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var au : AuthUserData = AuthUserData()
+    var refMapData : [StudentInformation] = MapData.allUserInformation
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {

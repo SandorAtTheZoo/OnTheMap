@@ -15,6 +15,9 @@ class TabBarViewController :  UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //create 2 bar buttons on right hand side by creating array and passing array to right bar button item
+        //I have forgotten where I found this, but this stackoverflow basically describes it
+        //make 2 buttons, put in array, assign array to rightBarButton
+        //http://stackoverflow.com/questions/22812378/how-to-add-multiple-buttons-on-the-top-navigation-of-ios-app
         let updateMap : UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Refresh, target: self, action: "refreshMap")
         let newPin : UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "pin"), style: UIBarButtonItemStyle.Plain, target: self, action: "addUserInfo")
         let tabButtonArray : [UIBarButtonItem]? = [updateMap, newPin]
