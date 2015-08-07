@@ -74,10 +74,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     
     func updateMap() {
         var annotations = [MKPointAnnotation]()
-        MapData.allUserInformation = MapData.updateAllStudents(appDelegate.refMapData, newStu: MapData.allUserInformation) { (stu1, stu2) -> Int in
-            return MapData.compareStudents(stu1 , stu2: stu2)
-        }
-        annotations = MapData.sharedInstance().placePins(MapData.allUserInformation)
+        annotations = MapData.sharedInstance().placePins(Array(MapData.allUserInformation))
 
         dispatch_async(dispatch_get_main_queue(), {
             self.mapView.removeAnnotations(self.mapView.annotations)

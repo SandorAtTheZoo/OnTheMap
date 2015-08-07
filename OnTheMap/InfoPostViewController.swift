@@ -119,7 +119,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
             if locSuccess {
                 println("udpating student info")
                 //update student array with changes
-                MapData.allUserInformation.append(self.currStudent)
+                MapData.allUserInformation.insert(self.currStudent)
                 NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
                 //return to map screen
                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -127,7 +127,7 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
             } else {
                 
                 //update student array with new student information
-                MapData.allUserInformation.append(self.currStudent)
+                MapData.allUserInformation.insert(self.currStudent)
                 
                 //POST user info to the Parse server
                 var httpData = MapData.dictionaryFromStudentForPost(self.currStudent)

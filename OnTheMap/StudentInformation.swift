@@ -22,12 +22,13 @@ struct StudentInformation : Hashable {
     var mediaURL : String?
     var objectID : String?
     var uniqueKey : String?
+    var hashKey : Int
     var updatedAt : String?
     
     //didn't find in apple docs about conform to Hashable
     //http://samuelmullen.com/2014/10/implementing_swifts_hashable_protocol/
     //conform to Hashable :
-    var hashValue: Int {
+    var hashValue : Int {
         if let hash = self.objectID!.toInt() {
             return hash
         } else {
@@ -48,6 +49,20 @@ struct StudentInformation : Hashable {
         self.objectID = dict["objectId"] as? String
         self.uniqueKey = dict["uniqueKey"] as? String
         self.updatedAt = dict["updatedAt"] as? String
+        
+        if let hash = self.objectID {
+            //converting string to unique hash, with help from 
+            //http://stackoverflow.com/questions/26227702/converting-nsdata-to-integer-in-swift
+            var key = NSString(string: hash)
+            var keyData : NSData = key.dataUsingEncoding(NSUTF32StringEncoding)!
+            var xData = keyData.subdataWithRange(NSMakeRange(0, 8))
+            var out : Int = 0
+            xData.getBytes(&out, length: sizeof(Int))
+            self.hashKey = out
+        } else {
+            self.hashKey = 0
+        }
+
     }
 }
 

@@ -11,7 +11,7 @@ import MapKit
 
 class MapData: NSObject {
     
-    static var allUserInformation : [StudentInformation] = [StudentInformation]()
+    static var allUserInformation = Set<StudentInformation>()
     
     override init() {
         super.init()
@@ -21,17 +21,10 @@ class MapData: NSObject {
         //create student variable
         //create functions as needed to update person from JSON
     static func addStudentInformation(studentArray:[[String:AnyObject]]) {
-        var locArray = MapData.allUserInformation
         
         for item in studentArray {
-            locArray.append(StudentInformation(dict: item))
+            MapData.allUserInformation.insert(StudentInformation(dict: item))
         }
-        MapData.allUserInformation = updateAllStudents(MapData.allUserInformation, newStu: locArray) { (stu1, stu2) -> Int in
-            var status = self.compareStudents(stu1 , stu2: stu2)
-            println("status : \(status)")
-            return status
-        }
-        //MapData.allUserInformation = locArray
     }
     
     static func dictionaryFromStudentForPost(aStudent:StudentInformation)-> String {
@@ -62,83 +55,6 @@ class MapData: NSObject {
             }
         }
         return false
-    }
-    
-    static func compareStudents(stu1:StudentInformation, stu2:StudentInformation)->Int {
-        if stu1.lastName == stu2.lastName &&
-            stu1.firstName == stu2.firstName &&
-            stu1.uniqueKey == stu2.uniqueKey &&
-            stu1.latitude == stu2.latitude &&
-            stu1.longitude == stu2.longitude &&
-            stu1.mediaURL == stu2.mediaURL {
-                //student exists
-                return 2
-        } else {
-            if stu1.lastName == stu2.lastName &&
-                stu1.firstName == stu2.firstName &&
-                stu1.uniqueKey == stu2.uniqueKey {
-                    //changing student info
-                    return 1
-            }
-        }
-        return 0
-    }
-    
-    static func updateAllStudents(refStu: [StudentInformation], newStu:[StudentInformation], stuClosure: (stu1 : StudentInformation, stu2 : StudentInformation)->Int)->[StudentInformation] {
-        //don't ever expect for refStu to have more items than newStu
-        var updatedStu : [StudentInformation] = refStu
-        
-        //ugg, O(n^2) yeah I know...
-        //it's starting to look like it was a huge mistake to have modeled StudentInformation after Villans structure, as it's a huge PITA to work with
-        //since I can't use the power of dictionary updates since it's now encapsulated in StudentInformation, so I'm writing n^2
-        //search to get around it (better ways there, but in reality, I'd re-write this stuff to fix StudentInformation)
-        //it has however, provided a nice exercise in closures...
-        for stu in newStu {
-            var idx = 0
-            var action = 0
-            var status = 0
-            var modify = 0
-            if refStu.count == 0 {
-                for stu in newStu {
-                    updatedStu.append(stu)
-                }
-                return updatedStu
-            } else {
-                do {
-                    status = stuClosure(stu1: stu , stu2: refStu[idx])
-                    if status == 1 && action != -1 {
-                        //modify student
-                        modify = 1
-                        action = idx
-                        break
-                    } else if status == 0 && action != -1 {
-                        //add new student
-                        modify = 2
-                    } else {
-                        //status == 2 : identical student exists, trumps other two
-                        //take no action for this round
-                        action = -1
-                        modify = 0
-                        break
-                    }
-                    idx++
-                } while (refStu.count > idx)
-            }
-            //now act to update student after all have been checked
-            if modify == 1 {
-                //student info needs to be updated
-                updatedStu[action].latitude = stu.latitude
-                updatedStu[action].longitude = stu.longitude
-                updatedStu[action].mediaURL = stu.mediaURL
-                break
-            }
-            if modify == 2 {
-                //new student, add to array of students
-                updatedStu.append(stu)
-                break
-            }
-        }
-        return updatedStu
     }
     
     func placePins(studentLocations: [StudentInformation])->[MKPointAnnotation] {

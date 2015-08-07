@@ -35,7 +35,10 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
         //reference cell
         let cell = tableView.dequeueReusableCellWithIdentifier("mapCell") as! UITableViewCell
         
-        let user = MapData.allUserInformation[indexPath.row]
+        //cast Set to Array because :
+        //https://github.com/rentzsch/mogenerator/issues/266
+        let newArr = Array(MapData.allUserInformation)
+        let user = newArr[indexPath.row]
         
         //set cell to user data
         cell.textLabel?.text = user.firstName! + " " + user.lastName!
@@ -56,7 +59,11 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         //add call to browser here
         let app = UIApplication.sharedApplication()
-        app.openURL(NSURL(string: MapData.allUserInformation[indexPath.row].mediaURL!)!)
+        
+        //cast Set to Array because :
+        //https://github.com/rentzsch/mogenerator/issues/266
+        let newArr = Array(MapData.allUserInformation)
+        app.openURL(NSURL(string: newArr[indexPath.row].mediaURL!)!)
     }
     
     func reloadUserData() {
