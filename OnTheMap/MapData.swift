@@ -35,7 +35,7 @@ class MapData: NSObject {
         tempDict["longitude"] = aStudent.longitude
         tempDict["mapString"] = aStudent.mapString
         tempDict["mediaURL"] = aStudent.mediaURL
-        tempDict["uniqueKey"] = "4913"
+        tempDict["uniqueKey"] = aStudent.uniqueKey
         
         var convData = NSJSONSerialization.dataWithJSONObject(tempDict, options: nil, error: nil)
         var finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
@@ -98,7 +98,7 @@ class MapData: NSObject {
             "mapString" : "",
             "mediaURL" : "",
             "objectId" : "",
-            "uniqueKey" : 0,
+            "uniqueKey" : "",
             "updatedAt" : ""
         ]
         return StudentInformation(dict: newStu)

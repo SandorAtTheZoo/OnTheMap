@@ -29,11 +29,12 @@ struct StudentInformation : Hashable {
     //http://samuelmullen.com/2014/10/implementing_swifts_hashable_protocol/
     //conform to Hashable :
     var hashValue : Int {
-        if let hash = self.objectID!.toInt() {
-            return hash
-        } else {
-            return 0
-        }
+//        if let hash = self.objectID!.toInt() {
+//            return hash
+//        } else {
+//            return 0
+//        }
+        return hashKey
         
     }
     
@@ -50,12 +51,16 @@ struct StudentInformation : Hashable {
         self.uniqueKey = dict["uniqueKey"] as? String
         self.updatedAt = dict["updatedAt"] as? String
         
+        //yes, this looks like duplicated code, but calling generateHash from within this init
+        //results in error of calling self before all values are initialized...as this code seems to use
+        //the same values, I'm not sure why that error happens, but that's why this is left
         if let hash = self.objectID {
             //converting string to unique hash, with help from 
             //http://stackoverflow.com/questions/26227702/converting-nsdata-to-integer-in-swift
+            //since Hashable needs to return a unique Int, which is not student objectId
             var key = NSString(string: hash)
             var keyData : NSData = key.dataUsingEncoding(NSUTF32StringEncoding)!
-            var xData = keyData.subdataWithRange(NSMakeRange(0, 8))
+            var xData = keyData.subdataWithRange(NSMakeRange(0, 4))
             var out : Int = 0
             xData.getBytes(&out, length: sizeof(Int))
             self.hashKey = out
