@@ -56,6 +56,34 @@ class MapData: NSObject {
         }
         return false
     }
+    //based on apple docs for DateFormatters, NSComparator and
+    //http://stackoverflow.com/questions/18195774/sorting-array-based-on-date-and-time-with-two-dictionary-keys
+    //http://stackoverflow.com/questions/25769107/sort-nsarray-with-sortedarrayusingcomparator
+    //although the apple docs actually had a better way to format than stackoverflow answer
+    //http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+    //https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/DataFormatting/Articles/dfDateFormatting10_4.html#//apple_ref/doc/uid/TP40002369-SW7
+    //http://stackoverflow.com/questions/805547/how-to-sort-an-nsmutablearray-with-custom-objects-in-it
+    static func sortStudentsBasedOnTime(stuList: [StudentInformation])->[StudentInformation] {
+        //first parse RFC 3339 date time (from apple)
+        let dateFmtrfc3339 : NSDateFormatter = NSDateFormatter()
+        let enPosixLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFmtrfc3339.locale = enPosixLocale
+        dateFmtrfc3339.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"
+        dateFmtrfc3339.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        
+        //now sort dates by StudentInformation
+        var sortedArray : [StudentInformation]
+        sortedArray = stuList.sorted({ (stu1, stu2) in
+            var date1 : NSDate = dateFmtrfc3339.dateFromString(stu1.updatedAt!)!
+            var date2 : NSDate = dateFmtrfc3339.dateFromString(stu2.updatedAt!)!
+            if date1.compare(date2) == NSComparisonResult.OrderedDescending {
+                return true
+            } else {
+                return false
+            }
+        })
+        return sortedArray
+    }
     
     func placePins(studentLocations: [StudentInformation])->[MKPointAnnotation] {
         var annotations = [MKPointAnnotation]()

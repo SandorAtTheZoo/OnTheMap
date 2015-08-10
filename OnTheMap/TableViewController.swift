@@ -11,9 +11,12 @@ import UIKit
 class TableViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var mapTableView: UITableView!
+    var sortedArrByDate = Array(MapData.allUserInformation)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //prevents a crash when the table is viewed for the first time
+        sortArr()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,8 +40,7 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
         
         //cast Set to Array because :
         //https://github.com/rentzsch/mogenerator/issues/266
-        let newArr = Array(MapData.allUserInformation)
-        let user = newArr[indexPath.row]
+        let user = sortedArrByDate[indexPath.row]
         
         //set cell to user data
         cell.textLabel?.text = user.firstName! + " " + user.lastName!
@@ -66,9 +68,18 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
         app.openURL(NSURL(string: newArr[indexPath.row].mediaURL!)!)
     }
     
+    func sortArr() {
+        //update with latest user info, and re-sort
+        sortedArrByDate = Array(MapData.allUserInformation)
+        sortedArrByDate = MapData.sortStudentsBasedOnTime(sortedArrByDate)
+    }
+    
     func reloadUserData() {
         //updates table after refresh.  needed to use GCD to schedule it
         //otherwise table did not update, even when using reload data
+        //update with latest user info and re-sort array prior to re-displaying table
+        //go out, retrieve user data, and on data retrieved, sort and update table
+        self.sortArr()
         dispatch_async(dispatch_get_main_queue(), {
             //reload data when user refreshes the map
             self.mapTableView.reloadData()

@@ -118,23 +118,19 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
             if locSuccess {
                 println("udpating student info")
                 //update student array with changes
-                MapData.allUserInformation.insert(self.currStudent)
-                NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
+                self.refreshMap()
                 //return to map screen
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
             } else {
-                
-                //update student array with new student information
-                MapData.allUserInformation.insert(self.currStudent)
-                
                 //POST user info to the Parse server
                 var httpData = MapData.dictionaryFromStudentForPost(self.currStudent)
                 
                 self.nwClient.postStudentLocation(httpData, completionHandler: {success, error in
                     if success {
                         println("successful POST")
-                        NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
+                        //call refresh map here so as to update table with all date strings filled in, otherwise, have incomplete student running around
+                        self.refreshMap()
                     } else {
                         Alert(viewC: self, title: "Student Info Error", errorString: error!)
                     }
@@ -182,6 +178,16 @@ class InfoPostViewController: UIViewController, MKMapViewDelegate {
         var myPin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: myReuse)
         myPin.pinColor = .Red
         return myPin
+    }
+
+    func refreshMap() {
+        UserNWClient.sharedInstance().getStudentLocations({(success, errorString) in
+            if success {
+                NSNotificationCenter.defaultCenter().postNotificationName("updateMapNotify", object: nil)
+            } else {
+                Alert(viewC: self, title: "Refresh Failure", errorString: errorString!)
+            }
+        })
     }
     
     func updateLoc() {
