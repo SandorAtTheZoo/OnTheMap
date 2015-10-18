@@ -58,9 +58,9 @@ struct StudentInformation : Hashable {
             //converting string to unique hash, with help from 
             //http://stackoverflow.com/questions/26227702/converting-nsdata-to-integer-in-swift
             //since Hashable needs to return a unique Int, which is not student objectId
-            var key = NSString(string: hash)
-            var keyData : NSData = key.dataUsingEncoding(NSUTF32StringEncoding)!
-            var xData = keyData.subdataWithRange(NSMakeRange(0, 4))
+            let key = NSString(string: hash)
+            let keyData : NSData = key.dataUsingEncoding(NSUTF32StringEncoding)!
+            let xData = keyData.subdataWithRange(NSMakeRange(0, 4))
             var out : Int = 0
             xData.getBytes(&out, length: sizeof(Int))
             self.hashKey = out

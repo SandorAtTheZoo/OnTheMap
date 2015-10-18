@@ -36,7 +36,7 @@ class TableViewController : UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //reference cell
-        let cell = tableView.dequeueReusableCellWithIdentifier("mapCell") as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("mapCell")! as UITableViewCell
         
         //cast Set to Array because :
         //https://github.com/rentzsch/mogenerator/issues/266

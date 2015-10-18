@@ -28,7 +28,7 @@ class MapData: NSObject {
     }
     
     static func dictionaryFromStudentForPost(aStudent:StudentInformation)-> String {
-        var tempDict = NSMutableDictionary()
+        let tempDict = NSMutableDictionary()
         tempDict["firstName"] = aStudent.firstName
         tempDict["lastName"] = aStudent.lastName
         tempDict["latitude"] = aStudent.latitude
@@ -37,10 +37,10 @@ class MapData: NSObject {
         tempDict["mediaURL"] = aStudent.mediaURL
         tempDict["uniqueKey"] = aStudent.uniqueKey
         
-        var convData = NSJSONSerialization.dataWithJSONObject(tempDict, options: nil, error: nil)
-        var finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
+        let convData = try? NSJSONSerialization.dataWithJSONObject(tempDict, options: [])
+        let finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
         
-        return finalData as! String
+        return finalData as String
     }
     
     static func findStudent(firstName : String, lastName : String, uniqueKey : String)->Bool {
@@ -73,9 +73,9 @@ class MapData: NSObject {
         
         //now sort dates by StudentInformation
         var sortedArray : [StudentInformation]
-        sortedArray = stuList.sorted({ (stu1, stu2) in
-            var date1 : NSDate = dateFmtrfc3339.dateFromString(stu1.updatedAt!)!
-            var date2 : NSDate = dateFmtrfc3339.dateFromString(stu2.updatedAt!)!
+        sortedArray = stuList.sort({ (stu1, stu2) in
+            let date1 : NSDate = dateFmtrfc3339.dateFromString(stu1.updatedAt!)!
+            let date2 : NSDate = dateFmtrfc3339.dateFromString(stu2.updatedAt!)!
             if date1.compare(date2) == NSComparisonResult.OrderedDescending {
                 return true
             } else {
@@ -101,7 +101,7 @@ class MapData: NSObject {
                         if let last = dictionary.lastName {
                             if let mediaURL = dictionary.mediaURL {
                                 //create annotation and set coordinate, title, and subtitle properties
-                                var annotation = MKPointAnnotation()
+                                let annotation = MKPointAnnotation()
                                 annotation.coordinate = coordinate
                                 annotation.title = "\(first) \(last)"
                                 annotation.subtitle = mediaURL
@@ -117,7 +117,7 @@ class MapData: NSObject {
     }
     
     static func newStudent() -> StudentInformation {
-        var newStu = [
+        let newStu = [
             "createdAt" : "",
             "firstName" : "",
             "lastName" : "",

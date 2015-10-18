@@ -51,7 +51,7 @@ class LoginViewController : UIViewController, UITextFieldDelegate {
     
     func startLogin() {
         //call POST method for login, and handle error and status as closure
-        nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text, pw: authPassword.text) as! String) {(success, errString) in
+        nwClient.authSignIn(appDelegate.au.baseURL, httpBody: appDelegate.au.authUser(authUsername.text!, pw: authPassword.text!) as! String) {(success, errString) in
             if success {
                 self.completeLogin()
             } else {

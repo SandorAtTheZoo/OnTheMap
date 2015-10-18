@@ -35,7 +35,7 @@ class TabBarViewController :  UITabBarController {
                 self.presentViewController(controller, animated: true, completion: nil)
                 })
             } else {
-                println("failed to logout")
+                print("failed to logout")
                 Alert(viewC: self, title: "Logout Error", errorString: "failed to logout")
             }
         }
@@ -46,8 +46,8 @@ class TabBarViewController :  UITabBarController {
     //action for newPin button
     func addUserInfo() {
         //get storyboard and target view controller
-        var storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var resultVC = storyboard.instantiateViewControllerWithIdentifier("InfoPostViewController") as! InfoPostViewController
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let resultVC = storyboard.instantiateViewControllerWithIdentifier("InfoPostViewController") as! InfoPostViewController
         
         //make the transition
         self.presentViewController(resultVC, animated: true, completion: nil)

@@ -38,7 +38,7 @@ class UserNWClient : NSObject {
         let task = session.dataTaskWithRequest(request) { data, response, downloadError in
             
             if let error = downloadError {
-                println("Could not complete the request \(error)")
+                print("Could not complete the request \(error)")
                 //network not available
                 //http://stackoverflow.com/questions/29122066/nsurlsession-error-handling
                 if error.domain == NSURLErrorDomain && error.code == NSURLErrorNotConnectedToInternet {
@@ -50,41 +50,75 @@ class UserNWClient : NSObject {
             } else {
                 
                 /* 5. Parse the data */
-                var parsingError: NSError? = nil
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                if let parsedResult = NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as? NSDictionary {
-                    
-                    /* 6. Use the data! */
-                    if let loggedIn = parsedResult["account"] as? NSDictionary {
-                        //reference closure data here for pass by reference?
-                        if let user = loggedIn["key"] as? String {
-                            self.appDelegate.au.userID = user
-                            completionHandler(success: true, errorString:nil)
-                        } else {
-                            println("no user ID acquired")
-                            //no username entered
-                            completionHandler(success: false, errorString:"no user ID entered")
-                        }
+                let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
+                
+                do {
+                    if let parsedResult = try NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as? NSDictionary {
                         
-                    } else {
-                        if let status = parsedResult["status"] as? Int {
-                            if status == 400 || status == 403 {
-                                if let errStr = parsedResult["error"] as? String {
-                                    completionHandler(success: false, errorString: errStr)
-                                } else {
-                                    completionHandler(success: false, errorString: "login failed, no error description")
-                                }
+                        /* 6. Use the data! */
+                        if let loggedIn = parsedResult["account"] as? NSDictionary {
+                            //reference closure data here for pass by reference?
+                            if let user = loggedIn["key"] as? String {
+                                self.appDelegate.au.userID = user
+                                completionHandler(success: true, errorString:nil)
                             } else {
-                                completionHandler(success: false, errorString: "login error, unknown error code")
+                                print("no user ID acquired")
+                                //no username entered
+                                completionHandler(success: false, errorString:"no user ID entered")
                             }
+                            
                         } else {
-                            completionHandler(success: false, errorString: "login error, no status")
+                            if let status = parsedResult["status"] as? Int {
+                                if status == 400 || status == 403 {
+                                    if let errStr = parsedResult["error"] as? String {
+                                        completionHandler(success: false, errorString: errStr)
+                                    } else {
+                                        completionHandler(success: false, errorString: "login failed, no error description")
+                                    }
+                                } else {
+                                    completionHandler(success: false, errorString: "login error, unknown error code")
+                                }
+                            }
                         }
                     }
-                } else {
-                    println("couldn not bring in data from udacity")
+                } catch {
+                    print("couldn not bring in data from udacity")
                     completionHandler(success: false, errorString:"no data returned from udacity")
                 }
+//example of old code re-written for swift 2.0 with do/try/catch above
+//                if let parsedResult = NSJSONSerialization.JSONObjectWithData(newData, options: NSJSONReadingOptions.AllowFragments) as? NSDictionary {
+//                    
+//                    /* 6. Use the data! */
+//                    if let loggedIn = parsedResult["account"] as? NSDictionary {
+//                        //reference closure data here for pass by reference?
+//                        if let user = loggedIn["key"] as? String {
+//                            self.appDelegate.au.userID = user
+//                            completionHandler(success: true, errorString:nil)
+//                        } else {
+//                            print("no user ID acquired")
+//                            //no username entered
+//                            completionHandler(success: false, errorString:"no user ID entered")
+//                        }
+//                        
+//                    } else {
+//                        if let status = parsedResult["status"] as? Int {
+//                            if status == 400 || status == 403 {
+//                                if let errStr = parsedResult["error"] as? String {
+//                                    completionHandler(success: false, errorString: errStr)
+//                                } else {
+//                                    completionHandler(success: false, errorString: "login failed, no error description")
+//                                }
+//                            } else {
+//                                completionHandler(success: false, errorString: "login error, unknown error code")
+//                            }
+//                        } else {
+//                            completionHandler(success: false, errorString: "login error, no status")
+//                        }
+//                    }
+//                } else {
+//                    print("couldn not bring in data from udacity")
+//                    completionHandler(success: false, errorString:"no data returned from udacity")
+//                }
             }
         }
         
@@ -94,12 +128,11 @@ class UserNWClient : NSObject {
     
     func authGetInfo(completionHandler: (userDictionary: NSDictionary?, success:Bool, errorString:String?)->Void) {
         //build URL
-        var urlString = appDelegate.au.getInfoURL + appDelegate.au.userID!
-        println("urlString : \(urlString)")
+        let urlString = appDelegate.au.getInfoURL + appDelegate.au.userID!
+        print("urlString : \(urlString)")
         let url = NSURL(string: urlString)!
         
         //configure and make request
-        var parsingError : NSError?
         let request = NSURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, getError) in
@@ -107,15 +140,20 @@ class UserNWClient : NSObject {
                 completionHandler(userDictionary: nil, success: false, errorString: "failed to connect to server")
             } else {
                 //parse data
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-                if let dataResult = NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments, error: &parsingError) as? NSDictionary {
-                    if let userData = dataResult["user"] as? NSDictionary {
-                        completionHandler(userDictionary: userData, success: true, errorString: nil)
-                    } else {
-                        completionHandler(userDictionary: nil, success: false, errorString: "failed to find user")
+                let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
+                do {
+                    if let dataResult = try NSJSONSerialization.JSONObjectWithData(newData, options: .AllowFragments) as? NSDictionary {
+                        if let userData = dataResult["user"] as? NSDictionary {
+                            completionHandler(userDictionary: userData, success: true, errorString: nil)
+                        } else {
+                            completionHandler(userDictionary: nil, success: false, errorString: "failed to find user")
+                        }
+                    } else { //put catch here
+                        completionHandler(userDictionary: nil, success: false, errorString: "no parsable JSON")
                     }
-                } else {
-                    completionHandler(userDictionary: nil, success: false, errorString: "no parsable JSON")
+                } catch
+                {
+                    
                 }
             }
         })
@@ -132,11 +170,11 @@ class UserNWClient : NSObject {
         var xsrfCookie: NSHTTPCookie? = nil
         
         let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies as! [NSHTTPCookie] {
+        for cookie in sharedCookieStorage.cookies as [NSHTTPCookie]! {
             if cookie.name == "XSRF-TOKEN" {xsrfCookie = cookie}
         }
         if let xsrfCookie = xsrfCookie {
-            request.addValue(xsrfCookie.value!, forHTTPHeaderField: "X-XSRF-Token")
+            request.addValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-Token")
         }
         
         let session = NSURLSession.sharedSession()
@@ -146,8 +184,8 @@ class UserNWClient : NSObject {
             } else {
                 completionHandler(success: true, errorString: nil)
             }
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length-5))
-            println(NSString(data:newData, encoding:NSUTF8StringEncoding))
+            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length-5))
+            print(NSString(data:newData, encoding:NSUTF8StringEncoding))
         }
         task.resume()
     }
@@ -160,11 +198,11 @@ class UserNWClient : NSObject {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request){data, response, error in
             if error != nil {
-                println("failed in parse call")
+                print("failed in parse call")
             }
             //println(NSString(data: data , encoding: NSUTF8StringEncoding))
-            var parseError : NSError? = nil
-            if let locs = NSJSONSerialization.JSONObjectWithData(data , options: NSJSONReadingOptions.AllowFragments, error: &parseError) as? NSDictionary {
+            do {
+            if let locs = try NSJSONSerialization.JSONObjectWithData(data! , options: NSJSONReadingOptions.AllowFragments) as? NSDictionary {
                 if let users = locs.valueForKey("results") as? [[String:AnyObject]] {
                     MapData.addStudentInformation(users)
                     completionHandler(success: true, errorString: nil)
@@ -173,6 +211,9 @@ class UserNWClient : NSObject {
                 }
             } else {
                 completionHandler(success: false, errorString: "failed to parse data from Parse")
+            }
+            } catch {
+                
             }
         }
         task.resume()
@@ -193,7 +234,7 @@ class UserNWClient : NSObject {
                 completionHandler(success: false, errorString: "Failed to POST student data to server")
             } else {
                 completionHandler(success: true, errorString: nil)
-                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+                print(NSString(data: data!, encoding: NSUTF8StringEncoding))
             }
             
         }
@@ -217,7 +258,7 @@ class UserNWClient : NSObject {
                 completionHandler(success: false, errorString: "Failed to PUT student data to server")
             } else {
                 completionHandler(success: true, errorString: nil)
-                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+                print(NSString(data: data!, encoding: NSUTF8StringEncoding))
             }
             
         }

@@ -46,7 +46,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
     // method in TableViewDataSource.
     //used from PinSample project right before starting this project
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView! {
         let reuseID = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseID) as? MKPinAnnotationView
@@ -55,7 +55,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
             pinView!.canShowCallout = true
             pinView!.pinColor = .Purple
-            pinView!.rightCalloutAccessoryView = UIButton.buttonWithType(UIButtonType.DetailDisclosure) as! UIButton
+            pinView!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure)
         } else {
             pinView!.annotation = annotation
         }
@@ -65,10 +65,10 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     
     // This delegate method is implemented to respond to taps. It opens the system browser
     // to the URL specified in the annotationViews subtitle property.
-    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
-            app.openURL(NSURL(string: view.annotation.subtitle!)!)
+            app.openURL(NSURL(string: view.annotation!.subtitle!!)!)
         }
     }
     
@@ -80,7 +80,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
         })
-        println("number of users : \(MapData.allUserInformation.count)")
+        print("number of users : \(MapData.allUserInformation.count)")
     }
 
 }

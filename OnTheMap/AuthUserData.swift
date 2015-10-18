@@ -32,8 +32,8 @@ struct AuthUserData {
         userData["password"] = pw
         httpBody["udacity"] = userData
         
-        var convData = NSJSONSerialization.dataWithJSONObject(httpBody, options: nil, error: nil)
-        var finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
+        let convData = try? NSJSONSerialization.dataWithJSONObject(httpBody, options: [])
+        let finalData : NSString = NSString(data: convData!, encoding: NSUTF8StringEncoding)!
         
         return finalData
         
